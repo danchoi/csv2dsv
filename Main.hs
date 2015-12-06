@@ -3,7 +3,7 @@
 module Main where
 
 import Data.Conduit
-import Data.Conduit.Binary
+import Data.Conduit.Binary (sourceFile, sinkFile)
 import Data.Conduit.List as CL
 import Data.CSV.Conduit
 import Data.Text (Text)
@@ -19,4 +19,13 @@ main = runResourceT $
                myProcessor
                (sinkFile "output.csv")
 
+
+
+{- 
+
+https://hackage.haskell.org/package/conduit-extra
+https://hackage.haskell.org/package/conduit-extra-1.1.9.2/docs/Data-Conduit-Binary.html
+https://hackage.haskell.org/package/conduit
+
+-}
 
