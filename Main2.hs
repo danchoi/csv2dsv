@@ -23,21 +23,22 @@ data Conf = Conf {
 main :: IO ()
 main = do
   Conf{..} <- execParser opts
-  let outCSVSettings = CSVSettings delimiter Nothing
+  let inDSVSettings = CSVSettings delimiter Nothing
   source' <- case source of
               "-" -> return stdin
               f -> openFile f ReadMode
   runResourceT $ 
-      transformCSV' defCSVSettings 
-                  outCSVSettings
+      transformCSV' 
+                  inDSVSettings
+                  defCSVSettings 
                    (sourceHandle source') 
                    process
                    (sinkHandle stdout)
 
 opts = info (helper <*> parseOpts)
           (fullDesc 
-            <> progDesc "Converts CSV to DSV format"
-            <> header "csv2dsv"
+            <> progDesc "Converts DSV to CSV format"
+            <> header "dsv2csv"
             <> footer "See https://github.com/danchoi/csv2dsv for more information.")
 
 parseOpts :: Parser Conf 
@@ -47,18 +48,9 @@ parseOpts = Conf
                 <> short 'd'
                 <> long "delimiter"
                 <> metavar "CHAR"
-                <> help "Delimiter characters. Defaults to \\t."))
-    <*> strArgument (metavar "FILE" <> help "Source CSV file. '-' for STDIN")
+                <> help "Delimiter characters of DSV input. Defaults to \\t."))
+    <*> strArgument (metavar "FILE" <> help "Source DSV file. '-' for STDIN")
    
 
 
-
-{- 
-
-https://hackage.haskell.org/package/conduit-extra
-https://hackage.haskell.org/package/conduit-extra-1.1.9.2/docs/Data-Conduit-Binary.html
-https://hackage.haskell.org/package/conduit
-http://hackage.haskell.org/package/csv-conduit
-
--}
 
